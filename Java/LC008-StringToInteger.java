@@ -43,7 +43,42 @@ Explanation: The number "-91283472332" is out of the range of a 32-bit signed in
  */
 
 class Solution {
+    private boolean isDigit(Character character) {
+        return character >= '0' && character <= '9';
+    }
+
     public int myAtoi(String str) {
-        
+        if (str == null || str.length() == 0)
+            return 0;
+        // Remove whitespces
+        String trimedString = str.trim();
+        int sign = 1;
+        int answer = 0;
+        for (int index = 0; index < trimedString.length(); index++) {
+            Character currentChar = trimedString.charAt(index);
+            if (isDigit(currentChar)) {
+                int newNumber = answer * 10 + (currentChar - '0');
+                // Detect overflow
+                if (newNumber * sign / 10 != answer * sign) {
+                    return sign > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+                }
+                answer = newNumber;
+            }
+            else if (index == 0) {
+                if (currentChar == '-') {
+                    sign = -1;
+                }
+                else if (currentChar == '+') {
+                    sign = 1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else {
+                return answer * sign;
+            }
+        }
+        return answer * sign;
     }
 }

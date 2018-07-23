@@ -20,6 +20,23 @@ Output: 49
 
 class Solution {
     public int maxArea(int[] height) {
-        
+        if (height == null || height.length < 2)
+            return 0;
+        int left = 0, right = height.length - 1, maxArea = 0;
+        while (left < right) {
+            int curArea = getArea(height, left, right);
+            if (height[left] > height[right]) {
+                right--;
+            }
+            else {
+                left++;
+            }
+            maxArea  = Math.max(curArea, maxArea);
+        }
+        return maxArea;
+    }
+
+    private int getArea(int[] height, int left, int right) {
+        return (right - left) * Math.min(height[left], height[right]);
     }
 }
