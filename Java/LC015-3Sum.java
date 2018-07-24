@@ -21,40 +21,39 @@ A solution set is:
  */
 
 class Solution {
-  public List<List<Integer>> threeSum(int[] nums) {
-      List<List<Integer>> answer = new ArrayList<List<Integer>>();
-      Arrays.sort(nums);
-      for (int index = 0; index < nums.length - 2; index++) {
-        if (index > 0 && nums[index] == nums[index - 1]) {
-          continue;
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> answer = new ArrayList<List<Integer>>();
+        Arrays.sort(nums);
+        for (int index = 0; index < nums.length - 2; index++) {
+            if (index > 0 && nums[index] == nums[index - 1]) {
+                continue;
+            }
+            populate2Sum(nums, nums[index], 0 - nums[index], index + 1, answer);
         }
-        List<Integer> curCombo = new ArrayList<Integer>();
-        populate2Sum(nums, 0 - nums[index], index + 1, curCombo);
-        if (curCombo.size() == 2) {
-          curCombo.add(nums[index]);
-          answer.add(curCombo);
-        }
-      }
-      return answer;
-  }
-
-  private void populate2Sum(int[] nums, int target, int startIndex, List<Integer> answer) {
-    int left = startIndex, right = nums.length - 1;
-    while (left < right) {
-      int sum = nums[left] + nums[right];
-      if (sum > target) {
-        right--;
-      }
-      else if (sum < target) {
-        left++;
-      }
-      else {
-        answer.add(nums[left]);
-        answer.add(nums[right]);
-        left++;
-        right--;
-      }
+        return answer;
     }
-    return;
-  }
+
+    private void populate2Sum(int[] nums, int firstNum, int target, int startIndex, List<List<Integer>> answer) {
+        int left = startIndex, right = nums.length - 1;
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+            if (sum > target) {
+                right--;
+            } else if (sum < target) {
+                left++;
+            } else {
+                Integer[] curCombo = new Integer[]{firstNum, nums[left], nums[right]};
+                answer.add(new ArrayList<Integer>(Arrays.asList(curCombo)));
+                left++;
+                right--;
+                while (left < nums.length && nums[left] == nums[left - 1]) {
+                    left++;
+                }
+                while (right >= 0 && nums[right] == nums[right + 1]) {
+                    right--;
+                }
+            }
+        }
+        return;
+    }
 }
