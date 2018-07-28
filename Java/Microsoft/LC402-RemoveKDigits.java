@@ -25,25 +25,39 @@ Explanation: Remove all the digits from the number and it is left with nothing w
 class Solution {
     public String removeKdigits(String num, int k) {
         if (num == null || num.length() == 0) {
-            return 0;
+            return "0";
         }
-        Stack<Character> digitStack = new Stack<Character>();
-        for (int index = 0; index < num.length() - 1; index++) {
-            if (k > 0) {
-                if (num.charAt(index) <= num.charAt(index + 1)) {
-                    digitStack.push(num.charAt(index));
-                    k--;
-                }
+        Stack<Integer> stack = new Stack<Integer>();
+        int index = 1;
+        stack.push(0);
+        while (k > 0 && index < num.lenght()) {
+            if (!stack.empty() && num.charAt(index) < num.charAt(stack.peek())) {
+                stack.pop();
+                k--;
+            }
+            else {
+                stack.push(index);
+                index++;
             }
         }
-        if (k == 0) {
-            digitStack.push(num.charAt(num.length() - 1));
+        while (k > 0 && !stack.empty()) {
+            stack.pop();
+            k--;
         }
-        StringBuffer answerBuffer = new StringBuffer();
-        while (!digitStack.empty()) {
-            answerBuffer.append(digitStack.pop());
+        String answer = num.substring(index);
+        while (!stack.empty()) {
+            answer = num.charAt(stack.pop()) + answer;
         }
-
-        return answerBuffer.toString();
+        int zeroIndex = 0;
+        boolean isHead = true;
+        while (zeroIndex < answer.length() && isHead) {
+            if (answer.charAt(zeroIndex) == '0') {
+                zeroIndex++;
+            } else {
+                isHead = false;
+            }
+        }
+        answer = answer.substring(zeroIndex);
+        return answer.length() > 0 ? answer : "0";
     }
 }
