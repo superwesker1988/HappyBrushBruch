@@ -23,5 +23,5 @@ var maximalSquare = function(matrix) {
             longestEdge = Math.max(resultBox[i][j], longestEdge);
         }
     }
-    return longestEdge * longestEdgel
+    return longestEdge * longestEdge;
 };

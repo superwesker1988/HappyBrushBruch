@@ -28,7 +28,7 @@ class Solution {
         }
         int[] incomes = new int[2];
         incomes[startIndex % 2] = nums[startIndex];
-        incomes[startIndex % 2 + 1] = Math.max(nums[startIndex], nums[endIndex]);
+        incomes[(startIndex + 1) % 2 ] = Math.max(nums[startIndex], nums[endIndex]);
         for (int index = startIndex + 2; index <= endIndex; index++) {
             incomes[index % 2] = Math.max(incomes[(index - 1) % 2], incomes[(index - 2) % 2] + nums[index]);
         }
@@ -39,6 +39,7 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return 0;
         }
+        // Compare cases where first house is considered or not (you can only choose head or tail but not both)
         return Math.max(getMaxIncome(nums, 0, nums.length - 2), getMaxIncome(nums, 1, nums.length - 1));
     }
 }
