@@ -26,28 +26,44 @@ The length of the input is in range of [1, 10000]
  */
 
 public class Solution {
-    private HashMap<Integer, PriorityQueue<Integer>> dmap;
     public boolean isPossible(int[] nums) {
-        dmap = new HashMap<>();
-        for (int num : nums) {
-            PriorityQueue<Integer> pq0 = getOrPut(num - 1);
-            int len = pq0.isEmpty() ? 0 : pq0.poll();
-            PriorityQueue<Integer> pq1 = getOrPut(num);
-            pq1.offer(len + 1);
+        if (nums == null || nums.length < 3) {
+            return false;
         }
-        for (int key : dmap.keySet()) {
-            for (int len : dmap.get(key)) {
-                if (len < 3) return false;
+        int offSet = -nums[0];
+        int[] freqMap = new int[10000];
+        for (int index = 0; index < nums.length; index++) {
+            freqMap[offSet + nums[index]]++;
+        }
+        // Variable to keep track of the number of lists which has only 1 char, 2 char, and more than 3 char.
+        int numOfOneCharList = 0, numOfTwoCharList = 0, numOfThreeCharList = 0;
+        int preNumber = nums[0];
+        for (int index = -offSet; index <= nums[nums.length - 1]; index++) {
+            int curCount = freqMap[index + offSet];
+            // When current number count is less than total of once arrays and twice arrays
+            // Or number is not consectutive after we have started a consectutive sequence, we return false.
+            if (numOfOneCharList + numOfTwoCharList > curCount ||
+            (numOfOneCharList + numOfTwoCharList != 0 && preNumber + 1 != index)) {
+                return false;
             }
+            if (preNumber + 1 != index) {
+                numOfThreeCharList = 0;
+            }
+            // Feed both 1-char and 2-char list with current count
+            int remainingCount = curCount - numOfOneCharList - numOfTwoCharList;
+            numOfThreeCharList = Math.min(numOfThreeCharList, remainingCount);
+            // Feed more-than-3-char lists 
+            remainingCount -= numOfThreeCharList;
+            // 2-char list becomes more-than-3-char lists
+            numOfThreeCharList += numOfTwoCharList;
+            // 1-char list becomes 2-char list
+            numOfTwoCharList = numOfOneCharList;
+            // The remaining count becomes new 1-char list
+            numOfOneCharList = remainingCount;
+            preNumber = index;
+            
         }
-        return true;
-    }
-    public PriorityQueue<Integer> getOrPut(int num) {
-        PriorityQueue<Integer> pq = dmap.get(num);
-        if (pq == null) {
-            pq = new PriorityQueue<Integer>();
-            dmap.put(num, pq);
-        }
-        return pq;
+        // If no list contains only 1 or 2 char, then it would be true
+        return numOfOneCharList + numOfTwoCharList == 0;
     }
 }

@@ -29,6 +29,7 @@ class Solution {
         for (int index = 1; index < newString.length(); index++) {
             int length = 1;
             if (midIndex + longestLength > index) {
+                // Take 
                 length = Math.min(answerArray[2 * midIndex - index], midIndex + longestLength - index);
             }
             while (index + length < newString.length() && index - length >= 0) {
