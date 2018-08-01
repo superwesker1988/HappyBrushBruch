@@ -25,6 +25,7 @@ Note:
 The length of the input is in range of [1, 10000]
  */
 
+// The basic idea is to identify number of lists which has only 1-char or 2-chars at the end of execution.
 public class Solution {
     public boolean isPossible(int[] nums) {
         if (nums == null || nums.length < 3) {
@@ -46,6 +47,7 @@ public class Solution {
             (numOfOneCharList + numOfTwoCharList != 0 && preNumber + 1 != index)) {
                 return false;
             }
+            // There is a break of consecutive here, which means current char does not belong to previous lists.
             if (preNumber + 1 != index) {
                 numOfThreeCharList = 0;
             }
