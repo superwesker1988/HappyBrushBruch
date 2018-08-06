@@ -26,84 +26,72 @@ cache.get(3);       // returns 3
 cache.get(4);       // returns 4
  */
 
-class LFUCache {
-    class DoublyLinkedList {
-        public int value;
-        public int key;
-        public int freqency;
-        public DoublyLinkedList prev;
-        public DoublyLinkedList next;
-        public DoublyLinkedList(int key, int value) {
-            this.key = key;
-            this.value = value;
-            this.freqency = 1;
-        }
-        public DoublyLinkedList(int key, int value, int freqency) {
-            this.key = key;
-            this.value = value;
-            this.freqency = freqency;
-        }
-    }
+class LRUCache {
+	class DoublyLinkedList<T, U> {
+		public DoublyLinkedList<T, U> next;
+		public DoublyLinkedList<T, U> prev;
+		public T key;
+		public U value;
+		public DoublyLinkedList(T key, U value) {
+			this.key = key;
+			this.value = value;
+			next = null;
+			prev = null;
+		}
+	}
+	
+	private DoublyLinkedList<Integer, Integer> head;
+	private DoublyLinkedList<Integer, Integer> tail;
+	private Map<Integer, DoublyLinkedList<Integer, Integer>> map;
+	private int capacity;
 
-    private int capacity;
-    private DoublyLinkedList head;
-    private DoublyLinkedList tail;
-    Map<Integer, DoublyLinkedList> storage;
-    public LFUCache(int capacity) {
+    public LRUCache(int capacity) {
         this.capacity = capacity;
-        this.head = new DoublyLinkedList(-1, -1, 0);
-        this.tail = new DoublyLinkedList(-1, -1, 0);
-        this.storage = new HashMap<Integer, DoublyLinkedList>();
-        this.head.next = this.tail;
-        this.tail.prev = this.head;
+		map = new HashMap<Integer, DoublyLinkedList<Integer, Integer>>();
+		head = new DoublyLinkedList<Integer, Integer>(-1, -1);
+		tail = new DoublyLinkedList<Integer, Integer>(-1, -1);
+		head.next = tail;
+		tail.prev = head;
     }
+	
+	private void moveNodeToTail(DoublyLinkedList<Integer, Integer> node) {
+		DoublyLinkedList<Integer, Integer> prevTail = this.tail.prev;
+		prevTail.next = node;
+		node.prev = prevTail;
+		node.next = this.tail;
+		this.tail.prev = node;
+	}
     
-    private void insert(DoublyLinkedList node) {
-        DoublyLinkedList pointer = this.head.next;
-        while (pointer != this.tail && pointer.freqency <= node.freqency) {
-            pointer = pointer.next;
-        }
-        pointer.prev.next = node;
-        node.prev = pointer.prev;
-        node.next = pointer;
-        pointer.prev = node;
-    }
-
     public int get(int key) {
-        if (!this.storage.containsKey(key)) {
-            return -1;
-        }
-        DoublyLinkedList targetNode = this.storage.get(key);
-        targetNode.freqency++;
-        targetNode.prev.next = targetNode.next;
-        targetNode.next.prev = targetNode.prev;
-        insert(targetNode);
-        return targetNode.value;
+        if (!this.map.containsKey(key)) {
+			return -1;
+		}
+		DoublyLinkedList<Integer, Integer> targetNode = map.get(key);
+		targetNode.prev.next = targetNode.next;
+		targetNode.next.prev = targetNode.prev;
+		moveNodeToTail(targetNode);
+		return targetNode.value;
     }
     
     public void put(int key, int value) {
-        if (this.capacity == 0) {
+        if (this.get(key) != -1) {
+			map.get(key).value = value;
             return;
-        }
-        if (get(key) != -1) {
-            this.storage.get(key).value = value;
-            return;
-        }
-        // Removes head node if capacity is hit
-        if (this.storage.size() == this.capacity) {
-            this.storage.remove(this.head.next.key);
-            this.head.next = this.head.next.next;
-            this.head.next.prev = this.head;
-        }
-        DoublyLinkedList newNode = new DoublyLinkedList(key, value);
-        insert(newNode);
-        this.storage.put(key, newNode);
+		}
+		if (this.capacity == this.map.size()) {
+			this.map.remove(this.head.next.key);
+			this.head.next = this.head.next.next;
+			this.head.next.prev = this.head;
+		}
+		DoublyLinkedList<Integer, Integer> newNode = new DoublyLinkedList<Integer, Integer>(key, value);
+		this.map.put(key, newNode);
+        moveNodeToTail(newNode);
     }
 }
 
 /**
- * Your LFUCache object will be instantiated and called as such:
- * LFUCache obj = new LFUCache(capacity);
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
  * int param_1 = obj.get(key);
  * obj.put(key,value);
  */
