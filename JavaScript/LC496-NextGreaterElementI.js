@@ -43,6 +43,6 @@ var nextGreaterElement = function(findNums, nums) {
         } else {
             answer.push(-1);
         }
-    })
+    });
     return answer;
 };
