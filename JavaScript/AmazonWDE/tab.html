@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .tab {
+            width: 100%;
+            height: 100%;
+            border: 1px grey solid;
+        }
+
+        .tab-control {
+            border: 1px grey solid;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .tab-control button {
+            border: 0;
+            background-color: rgb(100, 100, 100);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .tab-control button.active {
+            background-color: rgb(150, 150, 150);
+        }
+
+        .tab-control button:hover {
+            background-color: rgb(200, 200, 200);
+        }
+
+        .tab-content {
+            width: 100%;
+            height: 500px;
+            background-color: white;
+        }
+
+        .tab-content div {
+            display: none;
+        }
+
+        .tab-content div.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab">
+        <div class="tab-control">
+            <button data-tab-id="tab0" id="defaultTab" onclick="toggleTab(this)">Tab0</button>
+            <button data-tab-id="tab1" onclick="toggleTab(this)">Tab1</button>
+        </div>
+        <div class="tab-content">
+            <div id="tab0">tab0 content</div>
+            <div id="tab1">tab1 content</div>
+        </div>
+    </div>
+    <script>
+        var selectedTabCtrl = null;
+        function toggleTab(element) {
+            if (element === selectedTabCtrl) {
+                return;
+            }
+            if (selectedTabCtrl) {
+                selectedTabCtrl.classList.toggle("active");
+                document.getElementById(selectedTabCtrl.dataset.tabId).classList.toggle("active");
+            }
+            element.classList.toggle("active");
+            document.getElementById(element.dataset.tabId).classList.toggle("active");
+            selectedTabCtrl = element;
+        }
+        toggleTab(document.getElementById("defaultTab"));
+    </script>
+</body>
+
+</html>

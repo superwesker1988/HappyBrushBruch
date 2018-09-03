@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS Styles -->
+    <style>
+        .navBar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: gray;
+            height: 35px;
+            width: 100%;
+        }
+        .navBar .navBar-listItems {
+            display: flex;
+            flex-direction: row;
+        }
+        .navBar a {
+            font: bold white 18px;
+            background-color: gray;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        .navBar a.active {
+            background-color: green;
+        }
+
+        .navBar a:hover {
+            background-color: rgb(200, 200, 200);
+        }
+
+        /* Hide the link that should open and close the topnav on small screens */
+        .navBar .more-icon {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            .navBar .navBar-listItems a:not(:first-child) {
+                display: none;
+            }
+
+            .navBar.responsive .navBar-listItems a {
+                display: block;
+                flex-grow: 1;
+            }
+            .navBar .navBar-listItems {
+                flex-direction: column;
+                flex-grow: 1;
+            }
+
+            .navBar .more-icon {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HTML Elements -->
+    <div class="navBar">
+        <div class="navBar-listItems">
+            <a href="#home">Home</a>
+            <a href="#linkA">Link A</a>
+            <a href="#linkB">Link B</a>
+            <a href="#linkC">Link C</a>
+        </div>
+        <a href="javascript:void(0)" class="more-icon" onclick="toggleMore(this)">
+            <i class="fa fa-bars">E</i>
+        </a>
+    </div>
+</body>
+<!-- JS Functions -->
+<script>
+    function toggleMore(element) {
+        element.parentElement.classList.toggle("responsive");
+    }
+</script>
+
+</html>

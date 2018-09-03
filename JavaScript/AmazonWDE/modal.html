@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .dialog {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .dialog.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dialog-modal {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            min-width: 50%;
+            min-height: 50%;
+        }
+
+        .dialog-header {
+            background-color: green;
+            height: 25px;
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .dialog-header span {
+            color: white;
+        }
+
+        span.dialog-header-close:hover {
+            color: rgb(200, 200, 200);
+            cursor: pointer;
+        }
+
+        .dialog-body {
+            background-color: white;
+            flex-grow: 1;
+        }
+
+        .dialog-footer {
+            height: 50px;
+            background-color: rgb(200, 200, 200);
+            border: 1px rgb(100, 100, 100);
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function toggleDialog() {
+            document.getElementById("modal1").classList.toggle("active");
+        }
+    </script>
+    <button onclick="toggleDialog()">Open Dialog</button>
+    <div id="modal1" class="dialog">
+        <div class="dialog-modal">
+            <div class="dialog-header">
+                <span>Dialog</span>
+                <span class="dialog-header-close" onclick="toggleDialog()">&times;</span>
+            </div>
+            <div class="dialog-body">heihei</div>
+            <div class="dialog-footer"></div>
+        </div>
+    </div>
+</body>
+
+</html>
